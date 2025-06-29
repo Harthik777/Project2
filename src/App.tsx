@@ -164,10 +164,7 @@ function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="text-center">
             <p className="text-slate-500 text-sm">
-              Professional financial sentiment analysis platform
-            </p>
-            <p className="text-slate-400 text-xs mt-1">
-              Built with modern web technologies for real-time market insights
+              Made with ❤️ by Harthik
             </p>
           </div>
         </div>
