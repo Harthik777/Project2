@@ -21,11 +21,11 @@ export const NewsAnalyzer: React.FC<NewsAnalyzerProps> = ({ onBatchAnalysis }) =
     setNewsError(null);
     
     try {
-      console.log('🚀 Fetching latest financial news from free sources...');
+      console.log('Fetching latest financial news from free sources...');
       const latestNews = await freeNewsService.fetchLatestFinancialNews(20);
       setNewsItems(latestNews);
       setLastFetchTime(new Date());
-      console.log(`✅ Loaded ${latestNews.length} real financial news articles`);
+      console.log(`Loaded ${latestNews.length} real financial news articles`);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to fetch news';
       setNewsError(errorMessage);
@@ -130,25 +130,25 @@ export const NewsAnalyzer: React.FC<NewsAnalyzerProps> = ({ onBatchAnalysis }) =
   };
 
   return (
-    <div className="bg-gray-900/50 backdrop-blur-xl rounded-2xl border border-gray-700/50 p-6">
+    <div className="bg-white rounded-lg border border-slate-200 p-6">
       <div className="flex items-center gap-3 mb-6">
-        <div className="p-2 bg-gradient-to-r from-emerald-500/20 to-teal-500/20 rounded-lg">
-          <Newspaper className="w-6 h-6 text-emerald-400" />
+        <div className="p-2 bg-slate-100 rounded-lg">
+          <Newspaper className="w-5 h-5 text-slate-700" />
         </div>
         <div>
-          <h2 className="text-xl font-semibold text-white">Live News Analyzer</h2>
-          <p className="text-gray-400 text-sm">Real-time financial news from RSS feeds - No API keys required!</p>
+          <h2 className="text-lg font-semibold text-slate-900">Live News Feed</h2>
+          <p className="text-slate-500 text-sm">Real-time financial news from RSS feeds</p>
         </div>
       </div>
 
-      {/* Free Service Status */}
+      {/* Service Status */}
       <div className="mb-4">
-        <div className="flex items-center gap-2 text-green-400 text-sm">
+        <div className="flex items-center gap-2 text-emerald-600 text-sm">
           <CheckCircle className="w-4 h-4" />
-          <span>✨ Free Service Active: Yahoo Finance, MarketWatch, CNN Business RSS feeds</span>
+          <span>Live RSS feeds: Yahoo Finance, MarketWatch, CNN Business</span>
         </div>
         {lastFetchTime && (
-          <div className="flex items-center gap-2 text-blue-400 text-xs mt-1">
+          <div className="flex items-center gap-2 text-slate-500 text-xs mt-1">
             <Rss className="w-3 h-3" />
             <span>Last updated: {lastFetchTime.toLocaleTimeString()}</span>
           </div>
@@ -157,13 +157,13 @@ export const NewsAnalyzer: React.FC<NewsAnalyzerProps> = ({ onBatchAnalysis }) =
 
       {/* Error Display */}
       {newsError && (
-        <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-3 mb-4">
-          <div className="flex items-center gap-2 text-amber-400 text-sm">
+        <div className="bg-amber-50 border border-amber-200 rounded-lg p-3 mb-4">
+          <div className="flex items-center gap-2 text-amber-700 text-sm">
             <AlertCircle className="w-4 h-4" />
-            <span>Some news sources unavailable: {newsError}</span>
+            <span>Some sources unavailable: {newsError}</span>
           </div>
-          <p className="text-amber-300 text-xs mt-1">
-            Using available sources and fallback data. This is normal for free services.
+          <p className="text-amber-600 text-xs mt-1">
+            Using available sources and fallback data.
           </p>
         </div>
       )}
@@ -173,33 +173,33 @@ export const NewsAnalyzer: React.FC<NewsAnalyzerProps> = ({ onBatchAnalysis }) =
           <button
             onClick={loadLatestNews}
             disabled={isLoadingNews}
-            className="flex items-center gap-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 disabled:from-gray-600 disabled:to-gray-700 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 disabled:cursor-not-allowed"
+            className="flex items-center gap-2 bg-slate-900 hover:bg-slate-800 disabled:bg-slate-400 text-white font-medium py-2 px-4 rounded-lg transition-colors disabled:cursor-not-allowed"
           >
             {isLoadingNews ? (
               <>
                 <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                Loading News...
+                Loading...
               </>
             ) : (
               <>
                 <Globe className="w-4 h-4" />
-                Load Latest News (Free)
+                Load Latest News
               </>
             )}
           </button>
           
           <button
             onClick={loadSampleNews}
-            className="flex items-center gap-2 bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200"
+            className="flex items-center gap-2 bg-slate-600 hover:bg-slate-700 text-white font-medium py-2 px-4 rounded-lg transition-colors"
           >
             <FileText className="w-4 h-4" />
-            Sample News
+            Sample Data
           </button>
           
           <button
             onClick={analyzeBatchNews}
             disabled={newsItems.length === 0 || isLoading}
-            className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:from-gray-600 disabled:to-gray-700 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 disabled:cursor-not-allowed"
+            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-slate-400 text-white font-medium py-2 px-4 rounded-lg transition-colors disabled:cursor-not-allowed"
           >
             {isLoading ? (
               <>
@@ -217,10 +217,10 @@ export const NewsAnalyzer: React.FC<NewsAnalyzerProps> = ({ onBatchAnalysis }) =
           {results.length > 0 && (
             <button
               onClick={exportResults}
-              className="flex items-center gap-2 bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200"
+              className="flex items-center gap-2 bg-emerald-600 hover:bg-emerald-700 text-white font-medium py-2 px-4 rounded-lg transition-colors"
             >
               <Download className="w-4 h-4" />
-              Export Results
+              Export
             </button>
           )}
         </div>
@@ -228,28 +228,28 @@ export const NewsAnalyzer: React.FC<NewsAnalyzerProps> = ({ onBatchAnalysis }) =
         {newsItems.length > 0 && (
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="text-lg font-medium text-white">
-                News Articles ({newsItems.length})
+              <h3 className="text-base font-medium text-slate-900">
+                Articles ({newsItems.length})
               </h3>
               {newsItems.some(item => item.url) && (
-                <span className="text-green-400 text-sm flex items-center gap-1">
+                <span className="text-emerald-600 text-sm flex items-center gap-1">
                   <CheckCircle className="w-3 h-3" />
-                  Live RSS Data
+                  Live Data
                 </span>
               )}
             </div>
             <div className="max-h-60 overflow-y-auto space-y-2">
               {newsItems.map((item) => (
-                <div key={item.id} className="bg-gray-800/30 rounded-lg p-3 hover:bg-gray-800/50 transition-colors">
+                <div key={item.id} className="border border-slate-200 rounded-lg p-3 hover:bg-slate-50 transition-colors">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
-                      <p className="text-white text-sm font-medium leading-tight">
+                      <p className="text-slate-900 text-sm font-medium leading-tight">
                         {item.url ? (
                           <a 
                             href={item.url} 
                             target="_blank" 
                             rel="noopener noreferrer"
-                            className="hover:text-blue-400 transition-colors"
+                            className="hover:text-blue-600 transition-colors"
                           >
                             {item.headline}
                           </a>
@@ -258,12 +258,12 @@ export const NewsAnalyzer: React.FC<NewsAnalyzerProps> = ({ onBatchAnalysis }) =
                         )}
                       </p>
                       <div className="flex items-center gap-4 mt-2">
-                        <span className="text-gray-400 text-xs">{item.source}</span>
-                        <span className="text-gray-500 text-xs">{item.category}</span>
-                        <span className="text-gray-500 text-xs">{formatTimeAgo(item.timestamp)}</span>
+                        <span className="text-slate-500 text-xs">{item.source}</span>
+                        <span className="text-slate-400 text-xs">{item.category}</span>
+                        <span className="text-slate-400 text-xs">{formatTimeAgo(item.timestamp)}</span>
                       </div>
                       {item.description && (
-                        <p className="text-gray-400 text-xs mt-1 line-clamp-2">
+                        <p className="text-slate-500 text-xs mt-1 line-clamp-2">
                           {item.description}
                         </p>
                       )}
@@ -271,13 +271,13 @@ export const NewsAnalyzer: React.FC<NewsAnalyzerProps> = ({ onBatchAnalysis }) =
                     {item.sentiment && (
                       <div className="ml-3 text-right flex-shrink-0">
                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                          item.sentiment.sentiment === 'positive' ? 'bg-green-500/20 text-green-400' :
-                          item.sentiment.sentiment === 'negative' ? 'bg-red-500/20 text-red-400' :
-                          'bg-yellow-500/20 text-yellow-400'
+                          item.sentiment.sentiment === 'positive' ? 'bg-emerald-100 text-emerald-700' :
+                          item.sentiment.sentiment === 'negative' ? 'bg-red-100 text-red-700' :
+                          'bg-amber-100 text-amber-700'
                         }`}>
                           {item.sentiment.sentiment}
                         </span>
-                        <div className="text-white font-mono text-xs mt-1">
+                        <div className="text-slate-900 font-mono text-xs mt-1">
                           {item.sentiment.score > 0 ? '+' : ''}{item.sentiment.score.toFixed(3)}
                         </div>
                       </div>

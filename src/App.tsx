@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Brain, BarChart3, TrendingUp, Github, Linkedin } from 'lucide-react';
+import { Activity, BarChart3, TrendingUp, Github, Linkedin, Menu, X } from 'lucide-react';
 import { SentimentAnalyzer } from './components/SentimentAnalyzer';
 import { MarketDashboard } from './components/MarketDashboard';
 import { NewsAnalyzer } from './components/NewsAnalyzer';
@@ -10,6 +10,7 @@ function App() {
   const [sentimentHistory, setSentimentHistory] = useState<SentimentResult[]>([]);
   const [activeTab, setActiveTab] = useState<'analyzer' | 'batch' | 'dashboard' | 'risk'>('analyzer');
   const [isLoading, setIsLoading] = useState(true);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     // Simulate app initialization
@@ -32,79 +33,111 @@ function App() {
   };
 
   const tabs = [
-    { id: 'analyzer', label: 'Sentiment Analysis', icon: Brain },
-    { id: 'batch', label: 'Batch Analysis', icon: BarChart3 },
-    { id: 'dashboard', label: 'Market Dashboard', icon: TrendingUp },
-    { id: 'risk', label: 'Portfolio Risk', icon: BarChart3 },
+    { id: 'analyzer', label: 'Analysis', icon: Activity },
+    { id: 'batch', label: 'News Feed', icon: BarChart3 },
+    { id: 'dashboard', label: 'Dashboard', icon: TrendingUp },
+    { id: 'risk', label: 'Risk', icon: BarChart3 },
   ] as const;
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 flex items-center justify-center">
+      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-16 h-16 border-4 border-white/30 border-t-white rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-white text-lg">Initializing FinSentiment AI...</p>
+          <div className="w-8 h-8 border-2 border-slate-300 border-t-slate-600 rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-slate-600 text-sm font-medium">Loading platform...</p>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900">
+    <div className="min-h-screen bg-slate-50">
       {/* Header */}
-      <header className="bg-gray-900/80 backdrop-blur-xl border-b border-gray-700/50">
+      <header className="bg-white border-b border-slate-200 sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-3">
-              <div className="p-2 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg">
-                <Brain className="w-8 h-8 text-white" />
+              <div className="w-8 h-8 bg-slate-900 rounded-lg flex items-center justify-center">
+                <Activity className="w-5 h-5 text-white" />
               </div>
               <div>
-                <h1 className="text-xl font-bold text-white">FinSentiment AI</h1>
-                <p className="text-gray-400 text-sm">Financial Market Sentiment Analysis Platform</p>
+                <h1 className="text-lg font-semibold text-slate-900">MarketSense</h1>
+                <p className="text-slate-500 text-xs hidden sm:block">Financial Sentiment Analysis</p>
               </div>
             </div>
-            <div className="flex items-center gap-4">
+            
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex items-center space-x-1">
+              {tabs.map(({ id, label, icon: Icon }) => (
+                <button
+                  key={id}
+                  onClick={() => setActiveTab(id)}
+                  className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                    activeTab === id
+                      ? 'bg-slate-900 text-white'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                  }`}
+                >
+                  <Icon className="w-4 h-4" />
+                  {label}
+                </button>
+              ))}
+            </nav>
+
+            <div className="flex items-center gap-3">
               <a
                 href="https://github.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 text-gray-400 hover:text-white transition-colors"
+                className="p-2 text-slate-400 hover:text-slate-600 transition-colors"
               >
-                <Github className="w-5 h-5" />
+                <Github className="w-4 h-4" />
               </a>
               <a
                 href="https://linkedin.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="p-2 text-gray-400 hover:text-white transition-colors"
+                className="p-2 text-slate-400 hover:text-slate-600 transition-colors"
               >
-                <Linkedin className="w-5 h-5" />
+                <Linkedin className="w-4 h-4" />
               </a>
+              
+              {/* Mobile menu button */}
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="md:hidden p-2 text-slate-600"
+              >
+                {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+              </button>
             </div>
           </div>
         </div>
-      </header>
 
-      {/* Navigation Tabs */}
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
-        <div className="flex space-x-1 bg-gray-900/50 backdrop-blur-xl rounded-xl p-1 border border-gray-700/50">
-          {tabs.map(({ id, label, icon: Icon }) => (
-            <button
-              key={id}
-              onClick={() => setActiveTab(id)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg font-medium transition-all duration-200 ${
-                activeTab === id
-                  ? 'bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg'
-                  : 'text-gray-400 hover:text-white hover:bg-gray-800/50'
-              }`}
-            >
-              <Icon className="w-4 h-4" />
-              <span className="hidden sm:inline">{label}</span>
-            </button>
-          ))}
-        </div>
-      </nav>
+        {/* Mobile Navigation */}
+        {mobileMenuOpen && (
+          <div className="md:hidden border-t border-slate-200 bg-white">
+            <div className="px-4 py-2 space-y-1">
+              {tabs.map(({ id, label, icon: Icon }) => (
+                <button
+                  key={id}
+                  onClick={() => {
+                    setActiveTab(id);
+                    setMobileMenuOpen(false);
+                  }}
+                  className={`flex items-center gap-2 w-full px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                    activeTab === id
+                      ? 'bg-slate-900 text-white'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                  }`}
+                >
+                  <Icon className="w-4 h-4" />
+                  {label}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+      </header>
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
@@ -134,14 +167,14 @@ function App() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-gray-900/80 backdrop-blur-xl border-t border-gray-700/50 mt-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <footer className="bg-white border-t border-slate-200 mt-16">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
           <div className="text-center">
-            <p className="text-gray-400 text-sm">
-              Built with TensorFlow.js, React, and advanced ML algorithms for financial market analysis
+            <p className="text-slate-500 text-sm">
+              Professional financial sentiment analysis platform
             </p>
-            <p className="text-gray-500 text-xs mt-2">
-              © 2024 FinSentiment AI - Production-grade financial sentiment analysis platform
+            <p className="text-slate-400 text-xs mt-1">
+              Built with modern web technologies for real-time market insights
             </p>
           </div>
         </div>

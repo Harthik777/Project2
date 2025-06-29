@@ -63,34 +63,34 @@ export const PortfolioRisk: React.FC<PortfolioRiskProps> = ({ sentimentHistory }
 
   if (!portfolioImpact) {
     return (
-      <div className="bg-gray-900/50 backdrop-blur-xl rounded-2xl border border-gray-700/50 p-6">
+      <div className="bg-white rounded-lg border border-slate-200 p-6">
         <div className="flex items-center gap-3 mb-4">
-          <div className="p-2 bg-gradient-to-r from-orange-500/20 to-red-500/20 rounded-lg">
-            <Shield className="w-6 h-6 text-orange-400" />
+          <div className="p-2 bg-slate-100 rounded-lg">
+            <Shield className="w-5 h-5 text-slate-700" />
           </div>
           <div>
-            <h2 className="text-xl font-semibold text-white">Portfolio Risk Assessment</h2>
-            <p className="text-gray-400 text-sm">Analyze sentiment data to assess portfolio risk</p>
+            <h2 className="text-lg font-semibold text-slate-900">Portfolio Risk Assessment</h2>
+            <p className="text-slate-500 text-sm">Analyze sentiment data to assess portfolio risk</p>
           </div>
         </div>
         <div className="text-center py-8">
-          <p className="text-gray-400">Analyze some news items to see portfolio risk assessment</p>
+          <p className="text-slate-500">Analyze some news items to see portfolio risk assessment</p>
         </div>
       </div>
     );
   }
 
   const getRiskColor = (score: number) => {
-    if (score > 70) return 'text-red-400 bg-red-500/20';
-    if (score > 40) return 'text-orange-400 bg-orange-500/20';
-    return 'text-green-400 bg-green-500/20';
+    if (score > 70) return 'text-red-600 bg-red-50';
+    if (score > 40) return 'text-orange-600 bg-orange-50';
+    return 'text-emerald-600 bg-emerald-50';
   };
 
   const getActionColor = (action: string) => {
     switch (action) {
-      case 'buy': return 'text-green-400 bg-green-500/20';
-      case 'sell': return 'text-red-400 bg-red-500/20';
-      default: return 'text-yellow-400 bg-yellow-500/20';
+      case 'buy': return 'text-emerald-600 bg-emerald-50';
+      case 'sell': return 'text-red-600 bg-red-50';
+      default: return 'text-amber-600 bg-amber-50';
     }
   };
 
@@ -103,33 +103,33 @@ export const PortfolioRisk: React.FC<PortfolioRiskProps> = ({ sentimentHistory }
   };
 
   return (
-    <div className="bg-gray-900/50 backdrop-blur-xl rounded-2xl border border-gray-700/50 p-6">
+    <div className="bg-white rounded-lg border border-slate-200 p-6">
       <div className="flex items-center gap-3 mb-6">
-        <div className="p-2 bg-gradient-to-r from-orange-500/20 to-red-500/20 rounded-lg">
-          <Shield className="w-6 h-6 text-orange-400" />
+        <div className="p-2 bg-slate-100 rounded-lg">
+          <Shield className="w-5 h-5 text-slate-700" />
         </div>
         <div>
-          <h2 className="text-xl font-semibold text-white">Portfolio Risk Assessment</h2>
-          <p className="text-gray-400 text-sm">AI-powered risk analysis based on market sentiment</p>
+          <h2 className="text-lg font-semibold text-slate-900">Portfolio Risk Assessment</h2>
+          <p className="text-slate-500 text-sm">AI-powered risk analysis based on market sentiment</p>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <div className="bg-gray-800/30 rounded-lg p-4">
+        <div className="bg-slate-50 rounded-lg p-4">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-gray-400 text-sm">Overall Sentiment</span>
+            <span className="text-slate-500 text-sm">Overall Sentiment</span>
             <span className={`text-lg font-bold ${
-              portfolioImpact.overallSentiment > 0 ? 'text-green-400' : 
-              portfolioImpact.overallSentiment < 0 ? 'text-red-400' : 'text-yellow-400'
+              portfolioImpact.overallSentiment > 0 ? 'text-emerald-600' : 
+              portfolioImpact.overallSentiment < 0 ? 'text-red-600' : 'text-amber-600'
             }`}>
               {portfolioImpact.overallSentiment > 0 ? '+' : ''}
               {portfolioImpact.overallSentiment.toFixed(3)}
             </span>
           </div>
-          <div className="w-full bg-gray-700 rounded-full h-2">
+          <div className="w-full bg-slate-200 rounded-full h-2">
             <div 
               className={`h-2 rounded-full transition-all duration-300 ${
-                portfolioImpact.overallSentiment > 0 ? 'bg-green-500' : 'bg-red-500'
+                portfolioImpact.overallSentiment > 0 ? 'bg-emerald-500' : 'bg-red-500'
               }`}
               style={{ 
                 width: `${Math.abs(portfolioImpact.overallSentiment) * 100}%`,
@@ -139,35 +139,35 @@ export const PortfolioRisk: React.FC<PortfolioRiskProps> = ({ sentimentHistory }
           </div>
         </div>
 
-        <div className="bg-gray-800/30 rounded-lg p-4">
+        <div className="bg-slate-50 rounded-lg p-4">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-gray-400 text-sm">Risk Score</span>
+            <span className="text-slate-500 text-sm">Risk Score</span>
             <div className="flex items-center gap-2">
-              {portfolioImpact.riskScore > 50 && <AlertTriangle className="w-4 h-4 text-orange-400" />}
+              {portfolioImpact.riskScore > 50 && <AlertTriangle className="w-4 h-4 text-orange-500" />}
               <span className={`text-lg font-bold ${getRiskColor(portfolioImpact.riskScore).split(' ')[0]}`}>
                 {portfolioImpact.riskScore.toFixed(1)}
               </span>
             </div>
           </div>
-          <div className="w-full bg-gray-700 rounded-full h-2">
+          <div className="w-full bg-slate-200 rounded-full h-2">
             <div 
               className={`h-2 rounded-full transition-all duration-300 ${
                 portfolioImpact.riskScore > 70 ? 'bg-red-500' :
-                portfolioImpact.riskScore > 40 ? 'bg-orange-500' : 'bg-green-500'
+                portfolioImpact.riskScore > 40 ? 'bg-orange-500' : 'bg-emerald-500'
               }`}
               style={{ width: `${Math.min(portfolioImpact.riskScore, 100)}%` }}
             />
           </div>
         </div>
 
-        <div className="bg-gray-800/30 rounded-lg p-4">
+        <div className="bg-slate-50 rounded-lg p-4">
           <div className="flex items-center justify-between mb-2">
-            <span className="text-gray-400 text-sm">Confidence</span>
-            <span className="text-lg font-bold text-blue-400">
+            <span className="text-slate-500 text-sm">Confidence</span>
+            <span className="text-lg font-bold text-blue-600">
               {(portfolioImpact.confidence * 100).toFixed(1)}%
             </span>
           </div>
-          <div className="w-full bg-gray-700 rounded-full h-2">
+          <div className="w-full bg-slate-200 rounded-full h-2">
             <div 
               className="bg-blue-500 h-2 rounded-full transition-all duration-300"
               style={{ width: `${portfolioImpact.confidence * 100}%` }}
@@ -187,24 +187,24 @@ export const PortfolioRisk: React.FC<PortfolioRiskProps> = ({ sentimentHistory }
 
       {portfolioImpact.impactedSectors.length > 0 && (
         <div>
-          <h3 className="text-lg font-semibold text-white mb-4">Sector Impact Analysis</h3>
+          <h3 className="text-base font-semibold text-slate-900 mb-4">Sector Impact Analysis</h3>
           <div className="space-y-3">
             {portfolioImpact.impactedSectors.map((sector, index) => (
-              <div key={index} className="flex items-center justify-between p-3 bg-gray-800/30 rounded-lg">
+              <div key={index} className="flex items-center justify-between p-3 bg-slate-50 rounded-lg">
                 <div className="flex items-center gap-3">
-                  <span className="text-white font-medium">{sector.sector}</span>
+                  <span className="text-slate-900 font-medium">{sector.sector}</span>
                   <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                    sector.sentiment === 'positive' ? 'bg-green-500/20 text-green-400' :
-                    sector.sentiment === 'negative' ? 'bg-red-500/20 text-red-400' :
-                    'bg-yellow-500/20 text-yellow-400'
+                    sector.sentiment === 'positive' ? 'bg-emerald-100 text-emerald-700' :
+                    sector.sentiment === 'negative' ? 'bg-red-100 text-red-700' :
+                    'bg-amber-100 text-amber-700'
                   }`}>
                     {sector.sentiment}
                   </span>
                 </div>
                 <div className="text-right">
                   <span className={`font-mono text-sm ${
-                    sector.impact > 0 ? 'text-green-400' : 
-                    sector.impact < 0 ? 'text-red-400' : 'text-gray-400'
+                    sector.impact > 0 ? 'text-emerald-600' : 
+                    sector.impact < 0 ? 'text-red-600' : 'text-slate-500'
                   }`}>
                     {sector.impact > 0 ? '+' : ''}{sector.impact.toFixed(3)}
                   </span>
