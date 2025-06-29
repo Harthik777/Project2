@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Activity, BarChart3, TrendingUp, Github, Linkedin, Menu, X } from 'lucide-react';
+import { Activity, BarChart3, TrendingUp, Github, Menu, X } from 'lucide-react';
 import { SentimentAnalyzer } from './components/SentimentAnalyzer';
 import { MarketDashboard } from './components/MarketDashboard';
 import { NewsAnalyzer } from './components/NewsAnalyzer';
@@ -36,7 +36,7 @@ function App() {
     { id: 'analyzer', label: 'Analysis', icon: Activity },
     { id: 'batch', label: 'News Feed', icon: BarChart3 },
     { id: 'dashboard', label: 'Dashboard', icon: TrendingUp },
-    { id: 'risk', label: 'Risk', icon: BarChart3 },
+    { id: 'risk', label: 'Risk Assessment', icon: BarChart3 },
   ] as const;
 
   if (isLoading) {
@@ -86,20 +86,13 @@ function App() {
 
             <div className="flex items-center gap-3">
               <a
-                href="https://github.com"
+                href="https://github.com/Harthik777/Project2"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="p-2 text-slate-400 hover:text-slate-600 transition-colors"
+                title="View Source Code"
               >
                 <Github className="w-4 h-4" />
-              </a>
-              <a
-                href="https://linkedin.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="p-2 text-slate-400 hover:text-slate-600 transition-colors"
-              >
-                <Linkedin className="w-4 h-4" />
               </a>
               
               {/* Mobile menu button */}
