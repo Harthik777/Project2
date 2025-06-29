@@ -5,7 +5,7 @@
   "type": "module",
   "description": "AI-Powered Financial Market Sentiment Analysis Platform",
   "scripts": {
-    "dev": "vite",
+    "dev": "NODE_OPTIONS=--max-old-space-size=4096 vite",
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
