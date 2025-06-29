@@ -6,9 +6,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Financial Market Sentiment Analysis | AI-Powered Platform</title>
     <meta name="description" content="Advanced AI-powered platform for financial market sentiment analysis using TensorFlow.js" />
+    <style>
+      /* Prevent flash of unstyled content */
+      #root {
+        min-height: 100vh;
+      }
+      
+      /* Loading fallback */
+      .loading-fallback {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #1f2937 0%, #1e3a8a 50%, #7c3aed 100%);
+        color: white;
+        font-family: system-ui, -apple-system, sans-serif;
+      }
+    </style>
   </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+      <div class="loading-fallback">
+        <div style="text-align: center;">
+          <div style="width: 40px; height: 40px; border: 4px solid rgba(255,255,255,0.3); border-top: 4px solid white; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 16px;"></div>
+          <p>Loading FinSentiment AI...</p>
+        </div>
+      </div>
+    </div>
     <script type="module" src="/src/main.tsx"></script>
+    <style>
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
   </body>
 </html>
