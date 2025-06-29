@@ -35,22 +35,5 @@
     "typescript": "^5.5.3",
     "typescript-eslint": "^8.3.0",
     "vite": "^5.4.2"
-  },
-  "keywords": [
-    "machine-learning",
-    "sentiment-analysis",
-    "financial-analysis",
-    "tensorflow",
-    "react",
-    "typescript",
-    "ai",
-    "fintech"
-  ],
-  "author": "Your Name",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/yourusername/financial-sentiment-analysis-platform.git"
-  },
-  "homepage": "https://your-app-name.vercel.app"
+  }
 }
