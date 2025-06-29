@@ -2,18 +2,18 @@
 
 A production-grade AI-powered platform for financial market sentiment analysis using TensorFlow.js, React, and **real-time financial news from free RSS feeds**.
 
-## 🚀 Features
+## Features
 
-- **🆓 FREE Real-time News**: Fetches live financial news from RSS feeds (Yahoo Finance, MarketWatch, CNN Business)
-- **🤖 Advanced Sentiment Analysis**: Analyze financial news using ML models
-- **📊 Batch Processing**: Process multiple news items simultaneously
-- **📈 Market Dashboard**: Interactive charts and trend visualization
-- **⚖️ Portfolio Risk Assessment**: AI-powered risk analysis and recommendations
-- **📱 Responsive Design**: Beautiful, modern UI that works on all devices
-- **🚀 Production Ready**: Optimized for performance and scalability
-- **🔑 No API Keys Required**: Uses free RSS feeds and public data sources
+- **FREE Real-time News**: Fetches live financial news from RSS feeds (Yahoo Finance, MarketWatch, CNN Business)
+- **Advanced Sentiment Analysis**: Analyze financial news using ML models
+- **Batch Processing**: Process multiple news items simultaneously
+- **Market Dashboard**: Interactive charts and trend visualization
+- **Portfolio Risk Assessment**: AI-powered risk analysis and recommendations
+- **Responsive Design**: Beautiful, modern UI that works on all devices
+- **Production Ready**: Optimized for performance and scalability
+- **No API Keys Required**: Uses free RSS feeds and public data sources
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Frontend**: React 18 + TypeScript
 - **ML/AI**: TensorFlow.js
@@ -24,7 +24,7 @@ A production-grade AI-powered platform for financial market sentiment analysis u
 - **Build Tool**: Vite
 - **Deployment**: Vercel
 
-## 📦 Installation
+## Installation
 
 1. Clone the repository:
 ```bash
@@ -46,7 +46,7 @@ npm run dev
 
 **That's it! No API keys or configuration required.**
 
-## 🆓 Free News Sources
+## Free News Sources
 
 The platform uses **completely free** RSS feeds from major financial news sources:
 
@@ -68,7 +68,7 @@ The platform uses **completely free** RSS feeds from major financial news source
 4. **Deduplication**: Removes duplicate articles across sources
 5. **Real-time Updates**: Fresh news every time you click "Load Latest News"
 
-## 🚀 Deployment
+## Deployment
 
 ### Deploy to Vercel (Recommended)
 
@@ -94,14 +94,14 @@ Or simply connect your GitHub repository to Vercel for automatic deployments.
 - **GitHub Pages**: Enable Pages in repository settings
 - **Any Static Host**: Upload the built `dist` folder
 
-## 🎯 Usage
+## Usage
 
-1. **Live News Analysis**: Click "Load Latest News (Free)" to fetch real financial news
+1. **Live News Analysis**: Click "Load Latest News" to fetch real financial news
 2. **Sentiment Analysis**: Analyze individual news items or batch process multiple articles
 3. **Market Dashboard**: View sentiment trends and market metrics
 4. **Portfolio Risk**: Get AI-powered risk assessments and recommendations
 
-## 🏗️ Project Structure
+## Project Structure
 
 ```
 src/
@@ -121,7 +121,7 @@ src/
 └── main.tsx           # Application entry point
 ```
 
-## 📰 News Sources Details
+## News Sources Details
 
 ### RSS Feeds Used
 ```javascript
@@ -146,7 +146,7 @@ https://www.reuters.com/business/finance/rss
 - `corsproxy.io` - Backup proxy
 - `api.codetabs.com` - Secondary backup
 
-## 🤖 ML Model
+## ML Model
 
 The platform uses a custom sentiment analysis model built with TensorFlow.js that:
 - Processes financial text and news headlines
@@ -154,7 +154,7 @@ The platform uses a custom sentiment analysis model built with TensorFlow.js tha
 - Provides confidence scores and market impact assessments
 - Identifies relevant financial sectors
 
-## 📊 Features Overview
+## Features Overview
 
 ### Free Real-time News Integration
 - Live financial news from multiple RSS sources
@@ -181,7 +181,7 @@ The platform uses a custom sentiment analysis model built with TensorFlow.js tha
 - Sector impact analysis
 - Confidence-based insights
 
-## 🔧 Configuration
+## Configuration
 
 The project works out of the box with no configuration required:
 - Vite for fast development and building
@@ -191,7 +191,7 @@ The project works out of the box with no configuration required:
 - Free RSS news integration
 - Vercel for deployment
 
-## 📈 Performance
+## Performance
 
 - Client-side ML inference (no server costs)
 - Optimized bundle size with code splitting
@@ -200,7 +200,7 @@ The project works out of the box with no configuration required:
 - Production-ready architecture
 - **Completely free to run**
 
-## 🆓 Cost Breakdown
+## Cost Breakdown
 
 | Component | Cost |
 |-----------|------|
@@ -210,7 +210,7 @@ The project works out of the box with no configuration required:
 | Domain | Optional (~$10/year) |
 | **Total** | **$0/month** |
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch
@@ -218,11 +218,11 @@ The project works out of the box with no configuration required:
 4. Add tests if applicable
 5. Submit a pull request
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License.
 
-## 🎯 Perfect for
+## Perfect for
 
 - Financial analysis portfolios
 - ML/AI demonstrations
@@ -233,15 +233,15 @@ This project is licensed under the MIT License.
 - **Budget-conscious developers**
 - **Students and learners**
 
-## 🔍 Why This Approach?
+## Why This Approach?
 
 ### Advantages of RSS Feeds
-✅ **Completely Free** - No API costs or rate limits  
-✅ **Reliable** - RSS is a stable, widely-supported standard  
-✅ **Real-time** - News updates as soon as sources publish  
-✅ **No Authentication** - No API keys to manage  
-✅ **Multiple Sources** - Diversified news coverage  
-✅ **Production Ready** - Used by major news aggregators  
+- **Completely Free** - No API costs or rate limits  
+- **Reliable** - RSS is a stable, widely-supported standard  
+- **Real-time** - News updates as soon as sources publish  
+- **No Authentication** - No API keys to manage  
+- **Multiple Sources** - Diversified news coverage  
+- **Production Ready** - Used by major news aggregators  
 
 ### Comparison with Paid APIs
 | Feature | RSS Feeds | Paid APIs |
@@ -254,4 +254,4 @@ This project is licensed under the MIT License.
 
 ---
 
-Built with ❤️ using React, TypeScript, TensorFlow.js, and **free RSS feeds** for sustainable, cost-effective financial news analysis.
+Built with love using React, TypeScript, TensorFlow.js, and **free RSS feeds** for sustainable, cost-effective financial news analysis.

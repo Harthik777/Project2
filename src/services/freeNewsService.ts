@@ -124,7 +124,7 @@ class FreeNewsService {
 
   private async fetchRSSFeed(url: string, sourceName: string): Promise<NewsItem[]> {
     try {
-      console.log(`📡 Fetching RSS from ${sourceName}...`);
+      console.log(`Fetching RSS from ${sourceName}...`);
       const xmlData = await this.fetchWithProxy(url);
       const rssItems = this.parseRSSFeed(xmlData, sourceName);
       
@@ -138,17 +138,17 @@ class FreeNewsService {
         description: this.cleanDescription(item.description)
       }));
 
-      console.log(`✅ Fetched ${newsItems.length} articles from ${sourceName}`);
+      console.log(`Fetched ${newsItems.length} articles from ${sourceName}`);
       return newsItems;
     } catch (error) {
-      console.error(`❌ Failed to fetch from ${sourceName}:`, error);
+      console.error(`Failed to fetch from ${sourceName}:`, error);
       return [];
     }
   }
 
   // Fetch financial news from multiple free sources
   async fetchLatestFinancialNews(limit: number = 25): Promise<NewsItem[]> {
-    console.log('🚀 Starting free news fetch from multiple sources...');
+    console.log('Starting free news fetch from multiple sources...');
     
     const fetchPromises = [
       // Yahoo Finance
@@ -178,7 +178,7 @@ class FreeNewsService {
       });
 
       if (allNews.length === 0) {
-        console.warn('⚠️ No news fetched from any source, using fallback data');
+        console.warn('No news fetched from any source, using fallback data');
         return this.getFallbackNews();
       }
 
@@ -188,11 +188,11 @@ class FreeNewsService {
         .sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime())
         .slice(0, limit);
 
-      console.log(`✅ Successfully aggregated ${sortedNews.length} unique articles`);
+      console.log(`Successfully aggregated ${sortedNews.length} unique articles`);
       return sortedNews;
 
     } catch (error) {
-      console.error('❌ All news sources failed:', error);
+      console.error('All news sources failed:', error);
       return this.getFallbackNews();
     }
   }
