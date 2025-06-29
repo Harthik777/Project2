@@ -34,4 +34,8 @@ export interface NewsItem {
   timestamp: Date;
   category: string;
   sentiment?: SentimentResult;
+  url?: string;
+  description?: string;
+  imageUrl?: string;
+  topics?: string[];
 }

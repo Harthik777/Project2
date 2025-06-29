@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { Newspaper, Upload, FileText, Download } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Newspaper, Upload, FileText, Download, RefreshCw, AlertCircle, CheckCircle, Globe } from 'lucide-react';
 import { useSentimentAnalysis } from '../hooks/useSentimentAnalysis';
+import { newsService } from '../services/newsService';
 import { NewsItem } from '../types/sentiment';
 
 interface NewsAnalyzerProps {
@@ -10,47 +11,79 @@ interface NewsAnalyzerProps {
 export const NewsAnalyzer: React.FC<NewsAnalyzerProps> = ({ onBatchAnalysis }) => {
   const [newsItems, setNewsItems] = useState<NewsItem[]>([]);
   const [results, setResults] = useState<NewsItem[]>([]);
+  const [isLoadingNews, setIsLoadingNews] = useState(false);
+  const [newsError, setNewsError] = useState<string | null>(null);
+  const [apiStatus, setApiStatus] = useState<{
+    configured: boolean;
+    availableServices: string[];
+    missingServices: string[];
+  } | null>(null);
   const { analyzeBatch, isLoading } = useSentimentAnalysis();
 
-  const sampleNews: NewsItem[] = [
-    {
-      id: '1',
-      headline: 'Tech stocks surge as AI companies report strong earnings growth',
-      source: 'Financial Times',
-      timestamp: new Date(),
-      category: 'Technology'
-    },
-    {
-      id: '2',
-      headline: 'Federal Reserve signals potential interest rate cuts amid economic concerns',
-      source: 'Bloomberg',
-      timestamp: new Date(),
-      category: 'Economics'
-    },
-    {
-      id: '3',
-      headline: 'Oil prices plunge on weak demand forecasts and oversupply fears',
-      source: 'Reuters',
-      timestamp: new Date(),
-      category: 'Energy'
-    },
-    {
-      id: '4',
-      headline: 'Banking sector shows resilience with record quarterly profits',
-      source: 'Wall Street Journal',
-      timestamp: new Date(),
-      category: 'Finance'
-    },
-    {
-      id: '5',
-      headline: 'Healthcare stocks decline following drug approval setbacks',
-      source: 'MarketWatch',
-      timestamp: new Date(),
-      category: 'Healthcare'
+  useEffect(() => {
+    // Check API configuration on component mount
+    const status = newsService.isConfigured();
+    setApiStatus(status);
+  }, []);
+
+  const loadLatestNews = async () => {
+    setIsLoadingNews(true);
+    setNewsError(null);
+    
+    try {
+      const latestNews = await newsService.fetchLatestFinancialNews(15);
+      setNewsItems(latestNews);
+      console.log(`✅ Loaded ${latestNews.length} real financial news articles`);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : 'Failed to fetch news';
+      setNewsError(errorMessage);
+      console.error('Failed to load news:', error);
+      
+      // Fallback to sample news if real news fails
+      loadSampleNews();
+    } finally {
+      setIsLoadingNews(false);
     }
-  ];
+  };
 
   const loadSampleNews = () => {
+    const sampleNews: NewsItem[] = [
+      {
+        id: '1',
+        headline: 'Tech stocks surge as AI companies report strong earnings growth',
+        source: 'Financial Times',
+        timestamp: new Date(),
+        category: 'Technology'
+      },
+      {
+        id: '2',
+        headline: 'Federal Reserve signals potential interest rate cuts amid economic concerns',
+        source: 'Bloomberg',
+        timestamp: new Date(),
+        category: 'Economics'
+      },
+      {
+        id: '3',
+        headline: 'Oil prices plunge on weak demand forecasts and oversupply fears',
+        source: 'Reuters',
+        timestamp: new Date(),
+        category: 'Energy'
+      },
+      {
+        id: '4',
+        headline: 'Banking sector shows resilience with record quarterly profits',
+        source: 'Wall Street Journal',
+        timestamp: new Date(),
+        category: 'Finance'
+      },
+      {
+        id: '5',
+        headline: 'Healthcare stocks decline following drug approval setbacks',
+        source: 'MarketWatch',
+        timestamp: new Date(),
+        category: 'Healthcare'
+      }
+    ];
     setNewsItems(sampleNews);
   };
 
@@ -77,7 +110,8 @@ export const NewsAnalyzer: React.FC<NewsAnalyzerProps> = ({ onBatchAnalysis }) =
       score: item.sentiment?.score,
       confidence: item.sentiment?.confidence,
       marketImpact: item.sentiment?.marketImpact,
-      timestamp: item.timestamp.toISOString()
+      timestamp: item.timestamp.toISOString(),
+      url: item.url
     }));
 
     const dataStr = JSON.stringify(exportData, null, 2);
@@ -90,6 +124,19 @@ export const NewsAnalyzer: React.FC<NewsAnalyzerProps> = ({ onBatchAnalysis }) =
     URL.revokeObjectURL(url);
   };
 
+  const formatTimeAgo = (timestamp: Date) => {
+    const now = new Date();
+    const diffInMinutes = Math.floor((now.getTime() - timestamp.getTime()) / (1000 * 60));
+    
+    if (diffInMinutes < 60) {
+      return `${diffInMinutes}m ago`;
+    } else if (diffInMinutes < 1440) {
+      return `${Math.floor(diffInMinutes / 60)}h ago`;
+    } else {
+      return `${Math.floor(diffInMinutes / 1440)}d ago`;
+    }
+  };
+
   return (
     <div className="bg-gray-900/50 backdrop-blur-xl rounded-2xl border border-gray-700/50 p-6">
       <div className="flex items-center gap-3 mb-6">
@@ -97,19 +144,77 @@ export const NewsAnalyzer: React.FC<NewsAnalyzerProps> = ({ onBatchAnalysis }) =
           <Newspaper className="w-6 h-6 text-emerald-400" />
         </div>
         <div>
-          <h2 className="text-xl font-semibold text-white">News Batch Analyzer</h2>
-          <p className="text-gray-400 text-sm">Analyze multiple financial news items at once</p>
+          <h2 className="text-xl font-semibold text-white">Live News Analyzer</h2>
+          <p className="text-gray-400 text-sm">Analyze real-time financial news from multiple sources</p>
         </div>
       </div>
 
+      {/* API Status */}
+      {apiStatus && (
+        <div className="mb-4">
+          {apiStatus.configured ? (
+            <div className="flex items-center gap-2 text-green-400 text-sm">
+              <CheckCircle className="w-4 h-4" />
+              <span>Connected to: {apiStatus.availableServices.join(', ')}</span>
+            </div>
+          ) : (
+            <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-3 mb-4">
+              <div className="flex items-center gap-2 text-amber-400 text-sm mb-2">
+                <AlertCircle className="w-4 h-4" />
+                <span>API Configuration Required</span>
+              </div>
+              <p className="text-amber-300 text-xs">
+                To fetch real news, add API keys to your environment:
+              </p>
+              <ul className="text-amber-300 text-xs mt-1 ml-4">
+                <li>• VITE_NEWS_API_KEY (newsapi.org)</li>
+                <li>• VITE_FINNHUB_API_KEY (finnhub.io)</li>
+                <li>• VITE_ALPHA_VANTAGE_API_KEY (alphavantage.co)</li>
+              </ul>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Error Display */}
+      {newsError && (
+        <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-3 mb-4">
+          <div className="flex items-center gap-2 text-red-400 text-sm">
+            <AlertCircle className="w-4 h-4" />
+            <span>News Loading Error: {newsError}</span>
+          </div>
+          <p className="text-red-300 text-xs mt-1">
+            Falling back to sample data. Configure API keys for real news.
+          </p>
+        </div>
+      )}
+
       <div className="space-y-4">
-        <div className="flex gap-3">
+        <div className="flex gap-3 flex-wrap">
+          <button
+            onClick={loadLatestNews}
+            disabled={isLoadingNews}
+            className="flex items-center gap-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 disabled:from-gray-600 disabled:to-gray-700 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200 disabled:cursor-not-allowed"
+          >
+            {isLoadingNews ? (
+              <>
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                Loading News...
+              </>
+            ) : (
+              <>
+                <Globe className="w-4 h-4" />
+                Load Latest News
+              </>
+            )}
+          </button>
+          
           <button
             onClick={loadSampleNews}
-            className="flex items-center gap-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-700 hover:to-teal-700 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200"
+            className="flex items-center gap-2 bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white font-medium py-2 px-4 rounded-lg transition-all duration-200"
           >
             <FileText className="w-4 h-4" />
-            Load Sample News
+            Sample News
           </button>
           
           <button
@@ -143,20 +248,49 @@ export const NewsAnalyzer: React.FC<NewsAnalyzerProps> = ({ onBatchAnalysis }) =
 
         {newsItems.length > 0 && (
           <div className="space-y-3">
-            <h3 className="text-lg font-medium text-white">News Items ({newsItems.length})</h3>
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-medium text-white">
+                News Articles ({newsItems.length})
+              </h3>
+              {newsItems.some(item => item.url) && (
+                <span className="text-green-400 text-sm flex items-center gap-1">
+                  <CheckCircle className="w-3 h-3" />
+                  Live Data
+                </span>
+              )}
+            </div>
             <div className="max-h-60 overflow-y-auto space-y-2">
               {newsItems.map((item) => (
-                <div key={item.id} className="bg-gray-800/30 rounded-lg p-3">
+                <div key={item.id} className="bg-gray-800/30 rounded-lg p-3 hover:bg-gray-800/50 transition-colors">
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
-                      <p className="text-white text-sm font-medium">{item.headline}</p>
-                      <div className="flex items-center gap-4 mt-1">
+                      <p className="text-white text-sm font-medium leading-tight">
+                        {item.url ? (
+                          <a 
+                            href={item.url} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="hover:text-blue-400 transition-colors"
+                          >
+                            {item.headline}
+                          </a>
+                        ) : (
+                          item.headline
+                        )}
+                      </p>
+                      <div className="flex items-center gap-4 mt-2">
                         <span className="text-gray-400 text-xs">{item.source}</span>
                         <span className="text-gray-500 text-xs">{item.category}</span>
+                        <span className="text-gray-500 text-xs">{formatTimeAgo(item.timestamp)}</span>
                       </div>
+                      {item.description && (
+                        <p className="text-gray-400 text-xs mt-1 line-clamp-2">
+                          {item.description}
+                        </p>
+                      )}
                     </div>
                     {item.sentiment && (
-                      <div className="ml-3 text-right">
+                      <div className="ml-3 text-right flex-shrink-0">
                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${
                           item.sentiment.sentiment === 'positive' ? 'bg-green-500/20 text-green-400' :
                           item.sentiment.sentiment === 'negative' ? 'bg-red-500/20 text-red-400' :
