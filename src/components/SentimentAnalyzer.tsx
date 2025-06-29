@@ -10,14 +10,25 @@ interface SentimentAnalyzerProps {
 export const SentimentAnalyzer: React.FC<SentimentAnalyzerProps> = ({ onAnalysis }) => {
   const [text, setText] = useState('');
   const [result, setResult] = useState<SentimentResult | null>(null);
+  const [modelInitialized, setModelInitialized] = useState(false);
   const { analyzeText, isLoading, isModelReady, initializeModel } = useSentimentAnalysis();
 
-  useEffect(() => {
-    initializeModel();
-  }, [initializeModel]);
+  const handleInitializeModel = async () => {
+    if (modelInitialized) return;
+    try {
+      await initializeModel();
+      setModelInitialized(true);
+    } catch (error) {
+      console.error('Failed to initialize model:', error);
+    }
+  };
 
   const handleAnalysis = async () => {
     if (!text.trim()) return;
+    
+    if (!modelInitialized) {
+      await handleInitializeModel();
+    }
     
     try {
       const analysisResult = await analyzeText(text);
@@ -71,18 +82,13 @@ export const SentimentAnalyzer: React.FC<SentimentAnalyzerProps> = ({ onAnalysis
 
         <button
           onClick={handleAnalysis}
-          disabled={!text.trim() || isLoading || !isModelReady}
+          disabled={!text.trim() || isLoading}
           className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 disabled:from-gray-600 disabled:to-gray-700 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 disabled:cursor-not-allowed flex items-center justify-center gap-2"
         >
           {isLoading ? (
             <>
               <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-              Analyzing...
-            </>
-          ) : !isModelReady ? (
-            <>
-              <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-              Loading Model...
+              {modelInitialized ? 'Analyzing...' : 'Loading AI Model...'}
             </>
           ) : (
             <>
@@ -91,6 +97,14 @@ export const SentimentAnalyzer: React.FC<SentimentAnalyzerProps> = ({ onAnalysis
             </>
           )}
         </button>
+
+        {!modelInitialized && !isLoading && (
+          <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-3">
+            <p className="text-blue-400 text-sm">
+              💡 The AI model will load automatically when you first analyze text. This may take a moment.
+            </p>
+          </div>
+        )}
 
         {result && (
           <div className={`bg-gradient-to-r ${getSentimentColor(result.sentiment)} rounded-lg border p-4 mt-4`}>

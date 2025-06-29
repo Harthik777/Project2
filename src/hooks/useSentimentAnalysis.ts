@@ -1,18 +1,27 @@
 import { useState, useCallback, useRef } from 'react';
-import * as tf from '@tensorflow/tfjs';
 import { SentimentResult, NewsItem } from '../types/sentiment';
+
+// Dynamic import for TensorFlow.js to reduce initial bundle size
+const loadTensorFlow = async () => {
+  const tf = await import('@tensorflow/tfjs');
+  return tf;
+};
 
 export const useSentimentAnalysis = () => {
   const [isLoading, setIsLoading] = useState(false);
-  const [model, setModel] = useState<tf.LayersModel | null>(null);
   const [isModelReady, setIsModelReady] = useState(false);
-  const modelRef = useRef<tf.LayersModel | null>(null);
+  const modelRef = useRef<any>(null);
+  const tfRef = useRef<any>(null);
 
   const initializeModel = useCallback(async () => {
-    if (modelRef.current) return modelRef.current;
+    if (modelRef.current && tfRef.current) return modelRef.current;
     
     setIsLoading(true);
     try {
+      // Dynamically load TensorFlow.js
+      const tf = await loadTensorFlow();
+      tfRef.current = tf;
+      
       // Initialize TensorFlow.js
       await tf.ready();
       
@@ -34,7 +43,6 @@ export const useSentimentAnalysis = () => {
       });
 
       modelRef.current = model;
-      setModel(model);
       setIsModelReady(true);
       return model;
     } catch (error) {
@@ -47,7 +55,7 @@ export const useSentimentAnalysis = () => {
 
   const analyzeText = useCallback(async (text: string): Promise<SentimentResult> => {
     try {
-      if (!modelRef.current) {
+      if (!modelRef.current || !tfRef.current) {
         await initializeModel();
       }
 

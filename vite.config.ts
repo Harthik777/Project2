@@ -9,18 +9,19 @@ export default defineConfig({
     outDir: 'dist',
     assetsDir: 'assets',
     sourcemap: false,
+    chunkSizeWarningLimit: 1000,
     rollupOptions: {
       output: {
         manualChunks: {
           vendor: ['react', 'react-dom'],
-          tensorflow: ['@tensorflow/tfjs'],
-          charts: ['chart.js', 'react-chartjs-2']
+          charts: ['chart.js', 'react-chartjs-2', 'chartjs-adapter-date-fns', 'date-fns'],
+          ui: ['lucide-react']
         }
       }
     }
   },
   optimizeDeps: {
-    exclude: ['lucide-react'],
+    exclude: ['lucide-react', '@tensorflow/tfjs'],
   },
   server: {
     port: 5173,
