@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Newspaper, Upload, FileText, Download, RefreshCw, AlertCircle, CheckCircle, Globe } from 'lucide-react';
+import { Newspaper, Upload, FileText, Download, RefreshCw, AlertCircle, CheckCircle, Globe, Rss } from 'lucide-react';
 import { useSentimentAnalysis } from '../hooks/useSentimentAnalysis';
-import { newsService } from '../services/newsService';
+import { freeNewsService } from '../services/freeNewsService';
 import { NewsItem } from '../types/sentiment';
 
 interface NewsAnalyzerProps {
@@ -13,26 +13,18 @@ export const NewsAnalyzer: React.FC<NewsAnalyzerProps> = ({ onBatchAnalysis }) =
   const [results, setResults] = useState<NewsItem[]>([]);
   const [isLoadingNews, setIsLoadingNews] = useState(false);
   const [newsError, setNewsError] = useState<string | null>(null);
-  const [apiStatus, setApiStatus] = useState<{
-    configured: boolean;
-    availableServices: string[];
-    missingServices: string[];
-  } | null>(null);
+  const [lastFetchTime, setLastFetchTime] = useState<Date | null>(null);
   const { analyzeBatch, isLoading } = useSentimentAnalysis();
-
-  useEffect(() => {
-    // Check API configuration on component mount
-    const status = newsService.isConfigured();
-    setApiStatus(status);
-  }, []);
 
   const loadLatestNews = async () => {
     setIsLoadingNews(true);
     setNewsError(null);
     
     try {
-      const latestNews = await newsService.fetchLatestFinancialNews(15);
+      console.log('🚀 Fetching latest financial news from free sources...');
+      const latestNews = await freeNewsService.fetchLatestFinancialNews(20);
       setNewsItems(latestNews);
+      setLastFetchTime(new Date());
       console.log(`✅ Loaded ${latestNews.length} real financial news articles`);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'Failed to fetch news';
@@ -145,46 +137,33 @@ export const NewsAnalyzer: React.FC<NewsAnalyzerProps> = ({ onBatchAnalysis }) =
         </div>
         <div>
           <h2 className="text-xl font-semibold text-white">Live News Analyzer</h2>
-          <p className="text-gray-400 text-sm">Analyze real-time financial news from multiple sources</p>
+          <p className="text-gray-400 text-sm">Real-time financial news from RSS feeds - No API keys required!</p>
         </div>
       </div>
 
-      {/* API Status */}
-      {apiStatus && (
-        <div className="mb-4">
-          {apiStatus.configured ? (
-            <div className="flex items-center gap-2 text-green-400 text-sm">
-              <CheckCircle className="w-4 h-4" />
-              <span>Connected to: {apiStatus.availableServices.join(', ')}</span>
-            </div>
-          ) : (
-            <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-3 mb-4">
-              <div className="flex items-center gap-2 text-amber-400 text-sm mb-2">
-                <AlertCircle className="w-4 h-4" />
-                <span>API Configuration Required</span>
-              </div>
-              <p className="text-amber-300 text-xs">
-                To fetch real news, add API keys to your environment:
-              </p>
-              <ul className="text-amber-300 text-xs mt-1 ml-4">
-                <li>• VITE_NEWS_API_KEY (newsapi.org)</li>
-                <li>• VITE_FINNHUB_API_KEY (finnhub.io)</li>
-                <li>• VITE_ALPHA_VANTAGE_API_KEY (alphavantage.co)</li>
-              </ul>
-            </div>
-          )}
+      {/* Free Service Status */}
+      <div className="mb-4">
+        <div className="flex items-center gap-2 text-green-400 text-sm">
+          <CheckCircle className="w-4 h-4" />
+          <span>✨ Free Service Active: Yahoo Finance, MarketWatch, CNN Business RSS feeds</span>
         </div>
-      )}
+        {lastFetchTime && (
+          <div className="flex items-center gap-2 text-blue-400 text-xs mt-1">
+            <Rss className="w-3 h-3" />
+            <span>Last updated: {lastFetchTime.toLocaleTimeString()}</span>
+          </div>
+        )}
+      </div>
 
       {/* Error Display */}
       {newsError && (
-        <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-3 mb-4">
-          <div className="flex items-center gap-2 text-red-400 text-sm">
+        <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-3 mb-4">
+          <div className="flex items-center gap-2 text-amber-400 text-sm">
             <AlertCircle className="w-4 h-4" />
-            <span>News Loading Error: {newsError}</span>
+            <span>Some news sources unavailable: {newsError}</span>
           </div>
-          <p className="text-red-300 text-xs mt-1">
-            Falling back to sample data. Configure API keys for real news.
+          <p className="text-amber-300 text-xs mt-1">
+            Using available sources and fallback data. This is normal for free services.
           </p>
         </div>
       )}
@@ -204,7 +183,7 @@ export const NewsAnalyzer: React.FC<NewsAnalyzerProps> = ({ onBatchAnalysis }) =
             ) : (
               <>
                 <Globe className="w-4 h-4" />
-                Load Latest News
+                Load Latest News (Free)
               </>
             )}
           </button>
@@ -255,7 +234,7 @@ export const NewsAnalyzer: React.FC<NewsAnalyzerProps> = ({ onBatchAnalysis }) =
               {newsItems.some(item => item.url) && (
                 <span className="text-green-400 text-sm flex items-center gap-1">
                   <CheckCircle className="w-3 h-3" />
-                  Live Data
+                  Live RSS Data
                 </span>
               )}
             </div>
